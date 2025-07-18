@@ -17,9 +17,10 @@ function BodyFatEstimator({ user }) {
     setLoading(true); setErr(""); setResult("");
     try {
       const res = await estimateBodyFat(form);
-      setResult(`Estimated Body Fat: ${res.body_fat_percentage}%`);
-    } catch {
-      setErr("Body Fat Estimate failed. Try again.");
+      setResult(res.body_fat_percentage ? `Estimated Body Fat: ${res.body_fat_percentage}%` :
+        (res.result || "Estimation complete."));
+    } catch (err) {
+      setErr(err.message || "Body Fat Estimate failed. Try again.");
     }
     setLoading(false);
   }

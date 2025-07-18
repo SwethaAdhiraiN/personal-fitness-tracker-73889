@@ -8,7 +8,7 @@ function WorkoutPlan() {
   useEffect(() => {
     fetchWorkoutPlan()
       .then(setPlan)
-      .catch(() => setError("Could not load workout plan"));
+      .catch(err => setError(err.message || "Could not load workout plan"));
   }, []);
 
   if (error) return <div className="center"><div className="err">{error}</div></div>;

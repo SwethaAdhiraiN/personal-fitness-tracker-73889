@@ -18,7 +18,7 @@ function Login({ setUser }) {
       setUser(userResp);
       navigate("/");
     } catch (err) {
-      setError("Invalid credentials");
+      setError(err.message || "Invalid credentials");
     }
     setLoading(false);
   }

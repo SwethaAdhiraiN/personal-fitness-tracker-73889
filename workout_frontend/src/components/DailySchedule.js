@@ -22,7 +22,7 @@ function DailySchedule() {
         setMsg("");
         setError("");
       })
-      .catch(() => setError("Failed to load schedule"))
+      .catch(err => setError(err.message || "Failed to load schedule"))
       .finally(()=> setLoading(false));
   }, [date]);
 
@@ -32,8 +32,8 @@ function DailySchedule() {
     try {
       await updateChecklist(date, checklist);
       setMsg("Checklist saved!");
-    } catch {
-      setError("Failed to save");
+    } catch (err) {
+      setError((err && err.message) || "Failed to save");
     }
     setLoading(false);
   }

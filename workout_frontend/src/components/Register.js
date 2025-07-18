@@ -18,7 +18,7 @@ function Register({ setUser }) {
       setUser(userResp);
       navigate("/");
     } catch (err) {
-      setError("Registration failed");
+      setError(err.message || "Registration failed");
     }
     setLoading(false);
   }

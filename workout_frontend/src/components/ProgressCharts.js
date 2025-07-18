@@ -12,7 +12,7 @@ function ProgressCharts() {
   useEffect(() => {
     fetchProgress()
       .then(setProgress)
-      .catch(() => setErr("Could not load progress data"));
+      .catch(err => setErr(err.message || "Could not load progress data"));
   }, []);
 
   useEffect(() => {
