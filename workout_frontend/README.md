@@ -1,82 +1,105 @@
-# Lightweight React Template for KAVIA
+# Workout Frontend (React)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+This directory contains the React-based web UI for the Personal Fitness Tracker. It connects to the backend API and enables users to interact with personalized workout plans, daily schedules, body fat estimation, and progress visualizations.
 
-## Features
+## Overview
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- **UI Tech:** React (with vanilla CSS for styling & theming)
+- **Main Features:**
+  - User login/registration
+  - Dashboard-driven navigation
+  - Personalized weekly workout plan display
+  - Daily workout schedule & checklist
+  - Body fat percentage estimator
+  - Charts for progress tracking
+- **Container integration:** Makes HTTP requests to the backend API (Django) and expects API/CORS settings to allow interaction.
 
-## Getting Started
+## Required Environment Variables
 
-In the project directory, you can run:
+- `.env` file is optional for this frontend, but is supported to configure API URL.
+  - If omitted, defaults to `/api` (proxy)
+- Supported variable:
 
-### `npm start`
+| Variable           | Required | Purpose                           | Example                                 |
+|--------------------|----------|-----------------------------------|-----------------------------------------|
+| `REACT_APP_API_BASE` | No       | Base URL for backend API          | `http://localhost:8000/api`             |
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+If your frontend is served separately from the backend (e.g., during development):
 
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
+```env
+REACT_APP_API_BASE=http://localhost:8000/api
 ```
 
-### Components
+If using a reverse proxy or serving frontend from same host as API, no change needed.
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+## Bootstrapping & Setup
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+Run all commands from this directory (`workout_frontend`).
 
-## Learn More
+### 1. Install Node Dependencies
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```sh
+npm install
+```
 
-### Code Splitting
+### 2. Start the Frontend in Development Mode
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```sh
+npm start
+```
 
-### Analyzing the Bundle Size
+This will launch the frontend at [http://localhost:3000](http://localhost:3000) by default.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Known Ports
 
-### Making a Progressive Web App
+- React development server: **3000**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Available Commands
 
-### Advanced Configuration
+- `npm start` — Start local development server
+- `npm run build` — Create production-ready build in `build/`
+- `npm test` — Run unit tests
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Connecting to Backend
 
-### Deployment
+- By default, API requests are sent to `/api`, which presumes a proxy setup from frontend:3000 → backend:8000/api.
+    - If running containers separately, set `REACT_APP_API_BASE` in your `.env` to point to the backend API (`http://localhost:8000/api`).
+- **CORS** and session cookies must be allowed on the backend for full integration (already preconfigured in backend's `settings.py`).
+- Login and session are stored as browser cookies (backend uses session/cookie auth).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Cross-Container/Stack Run Instructions
 
-### `npm run build` fails to minify
+1. **Start the workout_database** and ensure the main database is initialized (`init_db.py`).
+2. **Start backend** and set the `SQLITE_DB` variable so it points to the shared SQLite file from the database step.
+3. In this directory, use `npm start` to run the frontend.
+4. If using `.env`, ensure `REACT_APP_API_BASE` points to backend (`http://localhost:8000/api`).
+5. Open `http://localhost:3000` in your browser.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Testing
+
+- Run `npm test` to execute React/unit tests.
+
+## API Endpoints Used
+
+This frontend expects the backend API as documented in [backend/README.md], including:
+- `/api/register/`, `/api/login/`, `/api/logout/`
+- `/api/my-weekly-workout/`, `/api/daily-checklist/`
+- `/api/estimate-body-fat/`, `/api/progress-chart/`
+- RESTful: `/api/workout-plans/`, `/api/daily-workouts/`, and others
+
+See backend for full details.
+
+## Customization & Branding
+
+- Colors and CSS variables are themed in `src/App.css` and documented in the code.
+- For code structure, see `src/components/` for main UI modules.
+
+## Troubleshooting
+
+- 404 or CORS issues: make sure backend is running and CORS in backend allows frontend.
+- Session/cookie issues: ensure both servers are on localhost and use `CORS_ALLOW_CREDENTIALS` in backend.
+- Proxy issues: configure `package.json` and/or `.env` properly.
+
+## Help
+
+For more info or to contribute, review the code in `src/` and contact maintainer.
